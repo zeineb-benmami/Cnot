@@ -76,7 +76,7 @@ function SignUpPage() {
 			  className="absolute inset-0 w-full h-full object-cover"
 			  style={{ filter: 'brightness(50%)' }}
 			>
-			  <source src="assets/images/logo/cnot.mov" type="video/mp4" />
+			  <source src="assets/images/logo/cnot.mp4" type="video/mp4" />
 			</video>
 			<Box className="absolute inset-0 bg-primary-main opacity-60"></Box>
 	
