@@ -51,11 +51,11 @@ function NavbarStyle1Content(props) {
 				<Navigation layout="vertical" />
 
 				<div className="flex-0 flex items-center justify-center py-48 opacity-10">
-					<img
+					{/*<img
 						className="w-full max-w-64"
-						src="assets/images/logo/logo.svg"
+						src="assets/images/logo/rings.png"
 						alt="footer logo"
-					/>
+	/>*/}
 				</div>
 			</StyledContent>
 		</Root>

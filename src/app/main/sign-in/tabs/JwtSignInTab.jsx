@@ -14,46 +14,26 @@ function jwtSignInTab() {
 					className="mx-8"
 					color="text.secondary"
 				>
-					Or continue with
+				À propos de nous
 				</Typography>
 				<div className="mt-px flex-auto border-t" />
 			</div>
+			<div className="flex justify-center mt-32">
+  <Button
+    variant="outlined"
+    className="w-8 h-8 p-1"
+    href='https://www.facebook.com/CNOTunisie/?locale=fr_FR'
+  >
+    <FuseSvgIcon
+      size={16}
+      color="action"
+    >
+      feather:facebook
+    </FuseSvgIcon>
+  </Button>
+</div>
 
-			<div className="mt-32 flex items-center space-x-16">
-				<Button
-					variant="outlined"
-					className="flex-auto"
-				>
-					<FuseSvgIcon
-						size={20}
-						color="action"
-					>
-						feather:facebook
-					</FuseSvgIcon>
-				</Button>
-				<Button
-					variant="outlined"
-					className="flex-auto"
-				>
-					<FuseSvgIcon
-						size={20}
-						color="action"
-					>
-						feather:twitter
-					</FuseSvgIcon>
-				</Button>
-				<Button
-					variant="outlined"
-					className="flex-auto"
-				>
-					<FuseSvgIcon
-						size={20}
-						color="action"
-					>
-						feather:github
-					</FuseSvgIcon>
-				</Button>
-			</div>
+
 		</div>
 	);
 }

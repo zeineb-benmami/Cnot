@@ -14,14 +14,14 @@ import useJwtAuth from 'src/app/auth/services/jwt/useJwtAuth';
  */
 const schema = z
 	.object({
-		displayName: z.string().nonempty('You must enter your name'),
-		email: z.string().email('You must enter a valid email').nonempty('You must enter an email'),
+		displayName: z.string().nonempty('Nom obligatoire'),
+		email: z.string().email('Emzil est invalide').nonempty('Email est obligatoire'),
 		password: z
 			.string()
-			.nonempty('Please enter your password.')
-			.min(8, 'Password is too short - should be 8 chars minimum.'),
-		passwordConfirm: z.string().nonempty('Password confirmation is required'),
-		acceptTermsConditions: z.boolean().refine((val) => val === true, 'The terms and conditions must be accepted.')
+			.nonempty('Veuillez entrer une mot de passe.')
+			.min(8, 'Il doit contenir au moins 8 caractères .'),
+		passwordConfirm: z.string().nonempty('Confirmation de mot de passe est obligatoire'),
+		acceptTermsConditions: z.boolean().refine((val) => val === true, "Vous devez accepter les conditions d'utilisation.")
 	})
 	.refine((data) => data.password === data.passwordConfirm, {
 		message: 'Passwords must match',
@@ -75,7 +75,7 @@ function JwtSignUpForm() {
 					<TextField
 						{...field}
 						className="mb-24"
-						label="Display name"
+						label="Nom"
 						autoFocus
 						type="name"
 						error={!!errors.displayName}
@@ -112,7 +112,7 @@ function JwtSignUpForm() {
 					<TextField
 						{...field}
 						className="mb-24"
-						label="Password"
+						label="Mot de passe"
 						type="password"
 						error={!!errors.password}
 						helperText={errors?.password?.message}
@@ -130,7 +130,7 @@ function JwtSignUpForm() {
 					<TextField
 						{...field}
 						className="mb-24"
-						label="Password (Confirm)"
+						label="Mot de passe (Confirmer)"
 						type="password"
 						error={!!errors.passwordConfirm}
 						helperText={errors?.passwordConfirm?.message}
@@ -150,7 +150,7 @@ function JwtSignUpForm() {
 						error={!!errors.acceptTermsConditions}
 					>
 						<FormControlLabel
-							label="I agree to the Terms of Service and Privacy Policy"
+							label="J'accepte les conditions d'utilisation et la politique de confidentialité."
 							control={
 								<Checkbox
 									size="small"

@@ -34,7 +34,7 @@ function ToolbarLayout1(props) {
 					backgroundColor: (theme) =>
 						theme.palette.mode === 'light'
 							? toolbarTheme.palette.background.paper
-							: toolbarTheme.palette.background.default
+							: toolbartheme.palette.background.default
 				}}
 				position="static"
 				elevation={0}

@@ -17,6 +17,8 @@ const navigationConfig = [
 		type: 'item',
 		icon: 'heroicons-outline:star',
 		url: 'example'
+<<<<<<< HEAD
+=======
 	},
 	{
 		id: 'apps',
@@ -45,6 +47,7 @@ const navigationConfig = [
 				url: '/apps/bourses'
 			}
 		]
+>>>>>>> d8f1ed215eda1f6de804bc28d50169af2f136da9
 	}
 ];
 export default navigationConfig;
