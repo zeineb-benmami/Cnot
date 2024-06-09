@@ -17,6 +17,37 @@ const navigationConfig = [
 		type: 'item',
 		icon: 'heroicons-outline:star',
 		url: 'example'
+<<<<<<< HEAD
+=======
+	},
+	{
+		id: 'apps',
+		title: 'Applications',
+		subtitle: 'Ici vous trouverez toute vos pages',
+		type: 'group',
+		icon: 'heroicons-outline:cube',
+		translate: 'APPLICATIONS',
+		children: [
+			{
+				id: 'apps.mailbox',
+				title: 'Mailbox',
+				type: 'item',
+				icon: 'heroicons-outline:mail',
+				url: '/apps/mailbox',
+				translate: 'MAIL',
+				badge: {
+					title: '27',
+					classes: 'px-8 bg-pink-600 text-white rounded-full'
+				}
+			},			{
+				id: 'apps.bourse',
+				title: 'Bourse',
+				type: 'item',
+				icon: 'heroicons-outline:cash',
+				url: '/apps/bourses'
+			}
+		]
+>>>>>>> d8f1ed215eda1f6de804bc28d50169af2f136da9
 	}
 ];
 export default navigationConfig;

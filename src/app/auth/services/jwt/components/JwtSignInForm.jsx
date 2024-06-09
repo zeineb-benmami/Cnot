@@ -1,4 +1,3 @@
-
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
@@ -11,7 +10,6 @@ import Checkbox from '@mui/material/Checkbox';
 import { Link } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import useJwtAuth from '../useJwtAuth';
-
 /**
  * Form Validation Schema
  */

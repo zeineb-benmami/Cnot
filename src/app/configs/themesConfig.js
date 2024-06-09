@@ -3,8 +3,11 @@ import { blueGrey } from '@mui/material/colors';
 /**
  * The lightPaletteText object defines the text color palette for the light theme.
  */
+<<<<<<< HEAD
 const olympicBlue = '#0085C7';
 
+=======
+>>>>>>> d8f1ed215eda1f6de804bc28d50169af2f136da9
 export const lightPaletteText = {
 	primary: 'rgb(17, 24, 39)',
 	secondary: 'rgb(107, 114, 128)',
@@ -38,10 +41,18 @@ export const themesConfig = {
 				contrastText: darkPaletteText.primary
 			},
 			secondary: {
+<<<<<<< HEAD
 				light: '#62b3ff', // Couleur bleue claire
 				main: olympicBlue, // Couleur bleue des Jeux Olympiques
 				dark: '#0056a3', // Couleur bleue foncée
 				contrastText: darkPaletteText.primary},
+=======
+				light: '#818cf8',
+				main: '#4f46e5',
+				dark: '#3730a3',
+				contrastText: darkPaletteText.primary
+			},
+>>>>>>> d8f1ed215eda1f6de804bc28d50169af2f136da9
 			background: {
 				paper: '#FFFFFF',
 				default: '#f1f5f9'
@@ -70,14 +81,24 @@ export const themesConfig = {
 				contrastText: darkPaletteText.primary
 			},
 			secondary: {
+<<<<<<< HEAD
 				light: '#62b3ff', // Couleur bleue claire
 				main: olympicBlue, // Couleur bleue des Jeux Olympiques
 				dark: '#0056a3', // Couleur bleue foncée
+=======
+				light: '#818cf8',
+				main: '#4f46e5',
+				dark: '#3730a3',
+>>>>>>> d8f1ed215eda1f6de804bc28d50169af2f136da9
 				contrastText: darkPaletteText.primary
 			},
 			background: {
 				paper: '#1e293b',
+<<<<<<< HEAD
 				default: '#000000'
+=======
+				default: '#111827'
+>>>>>>> d8f1ed215eda1f6de804bc28d50169af2f136da9
 			},
 			error: {
 				light: '#ffcdd2',
@@ -96,9 +117,15 @@ export const themesConfig = {
 				contrastText: darkPaletteText.primary
 			},
 			secondary: {
+<<<<<<< HEAD
 				main: olympicBlue, // Couleur bleue des Jeux Olympiques
 				light: '#62b3ff',
 				dark: '#0056a3',
+=======
+				main: '#B0BEC5',
+				light: '#E2F1F8',
+				dark: '#808E95',
+>>>>>>> d8f1ed215eda1f6de804bc28d50169af2f136da9
 				contrastText: lightPaletteText.primary
 			},
 			background: {
@@ -119,9 +146,15 @@ export const themesConfig = {
 				contrastText: darkPaletteText.primary
 			},
 			secondary: {
+<<<<<<< HEAD
 				main: olympicBlue, // Couleur bleue des Jeux Olympiques
 				light: '#62b3ff',
 				dark: '#0056a3',
+=======
+				main: '#B0BEC5',
+				light: '#E2F1F8',
+				dark: '#808E95',
+>>>>>>> d8f1ed215eda1f6de804bc28d50169af2f136da9
 				contrastText: lightPaletteText.primary
 			},
 			background: {
