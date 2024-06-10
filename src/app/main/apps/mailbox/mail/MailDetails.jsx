@@ -1,44 +1,56 @@
-import Avatar from '@mui/material/Avatar';
-import Typography from '@mui/material/Typography';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import withRouter from '@fuse/core/withRouter';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import FuseLoading from '@fuse/core/FuseLoading';
-import MailLabel from './MailLabel';
-import MailToolbar from './MailToolbar';
-import MailAttachment from './MailAttachment';
-import MailInfo from './MailInfo';
-import { useGetMailboxMailQuery } from '../MailboxApi';
+import Avatar from '@mui/material/Avatar';
+import Typography from '@mui/material/Typography';
+import { useParams } from 'react-router-dom';
+import { getEmailById } from 'src/services/mailService';
+import MailAttachment from '../MailAttachment';
 
-/**
- * The mail details.
- */
 function MailDetails() {
-	const { mailId } = useParams();
-	const { data: mail, isLoading } = useGetMailboxMailQuery(mailId);
+  const { mailId } = useParams();
+  const [selectedEmail, setSelectedEmail] = useState(null);
 
-	if (isLoading) {
-		return <FuseLoading />;
-	}
+  const fetchEmailById = async (id) => {
+    try {
+      const result = await getEmailById(id);
+      const data = result.data;
+      setSelectedEmail(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-	if (!mail) {
-		return null;
-	}
+  useEffect(() => {
+    fetchEmailById(mailId);
+  }, [mailId]);
 
-	return (
+  const deleteEmail = async (id) => {
+    // Implement your deleteEmail function
+  };
+
+  const bookmarkEmail = async (id) => {
+    // Implement your bookmarkEmail function
+  };
+
+  const downloadFile = (fileName) => {
+    // Implement your downloadFile function
+  };
+
+  return selectedEmail && (
 		<>
 			<div className="z-10 relative flex flex-col flex-0 w-full border-b">
-				<MailToolbar />
 
 				<div className="flex flex-wrap items-center py-20 px-24">
-					<div className="flex flex-auto my-4 mr-16 text-2xl">{mail.subject}</div>
-					{mail.labels && mail.labels.length > 0 && (
+					<div className="flex flex-auto my-4 mr-16 text-2xl">{selectedEmail.subject}</div>
+					{selectedEmail.labels && selectedEmail.labels.length > 0 && (
 						<div className="flex flex-wrap items-center justify-start -mx-4">
-							{mail.labels.map((labelId) => (
-								<MailLabel
+							{selectedEmail.labels.map((labelId) => (
+								<selectedEmailLabel
 									className="m-4"
 									key={labelId}
 									labelId={labelId}
@@ -56,51 +68,51 @@ function MailDetails() {
 				<Paper className="flex flex-col flex-0 w-full shadow rounded-2xl overflow-hidden">
 					<div className="flex flex-col py-32 px-24">
 						<div className="flex items-center w-full">
-							<Avatar src={mail.from.avatar} />
-
+            <div className="relative inline-flex items-center justify-center w-40 h-40 overflow-hidden bg-black rounded-full">
+            <span className="font-medium text-white">{selectedEmail.from?.charAt(0)}</span>
+          </div>
 							<div className="ml-16 min-w-0">
 								<Typography className="font-semibold truncate">
-									{mail.from.contact.split('<')[0].trim()}
+									{selectedEmail.from.split('<')[0].trim()}
 								</Typography>
 
 								<div className="flex items-center mt-8 leading-5">
 									<div>to</div>
 									<div className="mx-4 font-semibold">me</div>
-									{(mail.cc?.length ?? 0) + (mail.bcc?.length ?? 0) > 0 && (
+									{(selectedEmail.cc?.length ?? 0) + (selectedEmail.bcc?.length ?? 0) > 0 && (
 										<div>
 											<span className="mx-4">and</span>
 											<span className="mx-4 font-semibold">
-												{(mail.cc?.length ?? 0) + (mail.bcc?.length ?? 0)}
+												{(selectedEmail.cc?.length ?? 0) + (selectedEmail.bcc?.length ?? 0)}
 											</span>
 											<span className="mx-4 font-semibold">
-												{(mail.cc?.length ?? 0) + (mail.bcc?.length ?? 0) === 1
+												{(selectedEmail.cc?.length ?? 0) + (selectedEmail.bcc?.length ?? 0) === 1
 													? 'other'
 													: 'others'}
 											</span>
 										</div>
 									)}
-									<MailInfo />
 								</div>
 							</div>
 						</div>
 						<Typography
 							className="flex mt-32 whitespace-pre-line leading-relaxed"
 							variant="body2"
-							dangerouslySetInnerHTML={{ __html: mail.content }}
+							dangerouslySetInnerHTML={{ __html: selectedEmail.body }}
 						/>
 
-						{mail.attachments && mail.attachments?.length > 0 && (
+						{selectedEmail.attachments && selectedEmail.attachments?.length > 0 && (
 							<div className="flex flex-col w-full">
 								<div className="flex items-center mt-48">
 									<FuseSvgIcon size={20}>heroicons-solid:paper-clip</FuseSvgIcon>
-									<div className="mx-8 font-semibold">{mail.attachments.length} Attachments</div>
+									<div className="mx-8 font-semibold">{selectedEmail.attachments.length} Attachments</div>
 								</div>
 
 								<div className="flex flex-wrap -m-12 mt-12">
-									{mail.attachments.map((attachment, index) => (
+									{selectedEmail.attachments.map((attachment, index) => (
 										<MailAttachment
 											key={index}
-											attachment={attachment}
+											attachment={{className:'test',fileName:'test',size:'test'}}
 										/>
 									))}
 								</div>
@@ -143,7 +155,7 @@ function MailDetails() {
 				</Paper>
 			</Box>
 		</>
-	);
+  )
 }
 
-export default withRouter(MailDetails);
+export default MailDetails;

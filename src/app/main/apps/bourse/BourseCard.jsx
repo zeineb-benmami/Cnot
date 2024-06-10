@@ -41,15 +41,15 @@ function BourseCard(props) {
 				}}
 			>
 				<Button
-					href={`/apps/bourses/${bourse._id}`}
+					to={`/apps/bourses/${bourse._id}`}
 					component={Link}
 					className="px-16 min-w-128"
 					color="secondary"
 					variant="contained"
 					endIcon={<FuseSvgIcon size={20}>heroicons-solid:arrow-sm-right</FuseSvgIcon>}
 				>
-					consulter
-			</Button>
+					Consulter
+				</Button>
 			</CardActions>
 		</Card>
 	);

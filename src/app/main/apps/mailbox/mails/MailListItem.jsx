@@ -38,12 +38,12 @@ function MailListItem(props) {
 	const dispatch = useAppDispatch();
 	const selectedMailIds = useAppSelector(selectSelectedMailIds);
 	const { mail } = props;
-	const checked = selectedMailIds.length > 0 && selectedMailIds.find((id) => id === mail.id) !== undefined;
+	const checked = selectedMailIds.length > 0 && selectedMailIds.find((id) => id === mail._id) !== undefined;
 	return (
 		<StyledListItem
 			component={NavLinkAdapter}
 			activeClassName="selected"
-			to={mail.id}
+			to={mail._id}
 			dense
 			selected={checked}
 			unread={mail.unread ? 1 : 0}
@@ -56,7 +56,7 @@ function MailListItem(props) {
 				onClick={(ev) => {
 					ev.preventDefault();
 					ev.stopPropagation();
-					dispatch(toggleInSelectedMails(mail.id));
+					dispatch(toggleInSelectedMails(mail._id));
 				}}
 				size="small"
 			/>
@@ -67,25 +67,25 @@ function MailListItem(props) {
 						sx={{
 							backgroundColor: (_theme) => _theme.palette.primary.main
 						}}
-						alt={mail.from.email}
+						alt={mail.from}
 						src={mail.from?.avatar}
 					>
-						{mail.from.contact}
+						
 					</Avatar>
 					<div className="flex flex-col w-full min-w-0">
 						<div className="flex items-center w-full">
 							<Typography className="mr-8 font-semibold truncate">
-								{mail.from.contact.split('<')[0].trim()}
+								{mail.from.trim()}
 							</Typography>
 
-							{mail.important && (
+							{/*{mail.important && (
 								<FuseSvgIcon
 									className="mr-12 text-red-500 dark:text-red-600"
 									size={16}
 								>
 									heroicons-solid:exclamation-circle
 								</FuseSvgIcon>
-							)}
+							)}*/}
 
 							<Typography
 								className="ml-auto text-md text-right whitespace-nowrap"
@@ -96,11 +96,11 @@ function MailListItem(props) {
 						</div>
 						<div className="flex items-center w-full mt-4">
 							<span className="leading-4 truncate">{mail.subject}</span>
-							{((mail.attachments && mail.attachments.length > 0) || mail.starred) && (
+							{((mail.attachments && mail.attachments.length > 0) || mail.bookmarked) && (
 								<div className="flex ml-auto pl-8">
 									<FuseSvgIcon size={16}>heroicons-solid:paper-clip</FuseSvgIcon>
 
-									{mail.starred && (
+									{mail.bookmarked && (
 										<FuseSvgIcon
 											className="flex justify-center ml-4 text-orange-500 dark:text-orange-400"
 											size={16}
@@ -117,7 +117,7 @@ function MailListItem(props) {
 					color="text.secondary"
 					className="mt-8 leading-normal line-clamp-2"
 				>
-					{_.truncate(mail.content.replace(/<(?:.|\n)*?>/gm, ''), { length: 180 })}
+				{_.truncate(mail.body.replace(/<(?:.|\n)*?>/gm, ''), { length: 180 })}
 				</Typography>
 			</div>
 		</StyledListItem>
