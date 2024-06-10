@@ -1,5 +1,5 @@
-import { Bounce, toast } from "react-toastify";
-import API from "../config/axiosConfig";
+import API from "app/configs/axiosConfig";
+
 
 
 
@@ -15,31 +15,6 @@ export const bookmarkEmail = async (id : string) =>{
     const response = API.put(`mail/bookmark/${id}`);
     const data = (await response).data;
     console.log(data);
-    if(data.status === 'success'){
-        toast.success(data.message, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-          transition: Bounce,
-          });
-      } else {
-        toast.error(data.message, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-          transition: Bounce,
-          });            
-      }
     
     return response
 }
