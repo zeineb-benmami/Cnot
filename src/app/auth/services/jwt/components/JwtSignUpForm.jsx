@@ -1,181 +1,196 @@
+import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import TextField from '@mui/material/TextField';
-import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import FormHelperText from '@mui/material/FormHelperText';
-import Button from '@mui/material/Button';
-import _ from '@lodash';
+import { TextField, Button, FormControl, FormHelperText, Select, MenuItem, InputLabel, IconButton, ListItemText, Avatar, ListItemAvatar, InputAdornment } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import useJwtAuth from 'src/app/auth/services/jwt/useJwtAuth';
-/**
- * Form Validation Schema
- */
-const schema = z
-	.object({
-		displayName: z.string().nonempty('Nom obligatoire'),
-		email: z.string().email('Emzil est invalide').nonempty('Email est obligatoire'),
-		password: z
-			.string()
-			.nonempty('Veuillez entrer une mot de passe.')
-			.min(8, 'Il doit contenir au moins 8 caractères .'),
-		passwordConfirm: z.string().nonempty('Confirmation de mot de passe est obligatoire'),
-		acceptTermsConditions: z.boolean().refine((val) => val === true, "Vous devez accepter les conditions d'utilisation.")
-	})
-	.refine((data) => data.password === data.passwordConfirm, {
-		message: 'Passwords must match',
-		path: ['passwordConfirm']
-	});
-const defaultValues = {
-	displayName: '',
-	email: '',
-	password: '',
-	passwordConfirm: '',
-	acceptTermsConditions: false
-};
+
+const tunisianRegions = [
+    "Ariana", "Beja", "Ben Arous", "Bizerte", "Gabes", "Gafsa", 
+    "Jendouba", "Kairouan", "Kasserine", "Kebili", "Kef", "Mahdia", 
+    "Manouba", "Medenine", "Monastir", "Nabeul", "Sfax", "Sidi Bouzid", 
+    "Siliana", "Sousse", "Tataouine", "Tozeur", "Tunis", "Zaghouan"
+];
+
+const logos = [
+    { name: "Federation1", path: "/assets/logos/federation1.png" },
+    { name: "Federation2", path: "/assets/logos/federation2.png" },
+    { name: "Federation3", path: "/assets/logos/federation3.png" }
+];
+
+const schema = z.object({
+    displayName: z.string().min(1, 'Nom obligatoire'),
+    email: z.string().email('Email est invalide').min(1, 'Email est obligatoire'),
+    password: z.string().min(8, 'Le mot de passe doit contenir au moins 8 caractères'),
+    passwordConfirm: z.string().min(8, 'La confirmation du mot de passe doit également contenir au moins 8 caractères'),
+    address: z.string().min(1, 'Adresse est obligatoire'),
+    tel: z.string().min(8, 'Le numéro de téléphone doit contenir au moins 8 chiffres'),
+    certificate: z.string().min(1, 'Logo obligatoire'),
+}).refine((data) => data.password === data.passwordConfirm, {
+    message: 'Les mots de passe ne correspondent pas',
+    path: ['passwordConfirm']
+});
 
 function JwtSignUpForm() {
-	const { signUp } = useJwtAuth();
-	const { control, formState, handleSubmit, setError } = useForm({
-		mode: 'onChange',
-		defaultValues,
-		resolver: zodResolver(schema)
-	});
-	const { isValid, dirtyFields, errors } = formState;
+    const { signUp } = useJwtAuth();
+    const [currentStep, setCurrentStep] = useState(0);
+    const { control, handleSubmit, formState: { errors }, getValues, setValue } = useForm({
+        resolver: zodResolver(schema),
+        mode: 'onChange',
+        reValidateMode: 'onChange',
+        defaultValues: {
+            displayName: '',
+            email: '',
+            password: '',
+            passwordConfirm: '',
+            address: '',
+            tel: '',
+            certificate: ''
+        }
+    });
 
-	function onSubmit(formData) {
-		const { displayName, email, password } = formData;
-		signUp({
-			displayName,
-			password,
-			email
-		})
-			.then(() => {
-				// No need to do anything, registered user data will be set at app/auth/AuthRouteProvider
-			})
-			.catch((_errors) => {
-				_errors.forEach(({ message, type }) => {
-					setError(type, { type: 'manual', message });
-				});
-			});
-	}
+    const isFirstStepValid = () => {
+        const values = getValues();
+        return values.displayName && values.email && values.password && values.passwordConfirm &&
+               !errors.displayName && !errors.email && !errors.password && !errors.passwordConfirm;
+    };
 
-	return (
-		<form
-			name="registerForm"
-			noValidate
-			className="mt-32 flex w-full flex-col justify-center"
-			onSubmit={handleSubmit(onSubmit)}
-		>
-			<Controller
-				name="displayName"
-				control={control}
-				render={({ field }) => (
-					<TextField
-						{...field}
-						className="mb-24"
-						label="Nom"
-						autoFocus
-						type="name"
-						error={!!errors.displayName}
-						helperText={errors?.displayName?.message}
-						variant="outlined"
-						required
-						fullWidth
-					/>
-				)}
-			/>
+    const isSecondStepValid = () => {
+        const values = getValues();
+        return values.address && values.tel && values.certificate &&
+               !errors.address && !errors.tel && !errors.certificate;
+    };
 
-			<Controller
-				name="email"
-				control={control}
-				render={({ field }) => (
-					<TextField
-						{...field}
-						className="mb-24"
-						label="Email"
-						type="email"
-						error={!!errors.email}
-						helperText={errors?.email?.message}
-						variant="outlined"
-						required
-						fullWidth
-					/>
-				)}
-			/>
+    const onSubmit = formData => {
+        if (currentStep === 0) {
+            setCurrentStep(1);  // Proceed to next step
+        } else {
+            signUp(formData)
+                .then(() => {
+                    // Handle success
+                })
+                .catch(error => {
+                    // Handle error
+                    console.error(error);
+                });
+        }
+    };
 
-			<Controller
-				name="password"
-				control={control}
-				render={({ field }) => (
-					<TextField
-						{...field}
-						className="mb-24"
-						label="Mot de passe"
-						type="password"
-						error={!!errors.password}
-						helperText={errors?.password?.message}
-						variant="outlined"
-						required
-						fullWidth
-					/>
-				)}
-			/>
-
-			<Controller
-				name="passwordConfirm"
-				control={control}
-				render={({ field }) => (
-					<TextField
-						{...field}
-						className="mb-24"
-						label="Mot de passe (Confirmer)"
-						type="password"
-						error={!!errors.passwordConfirm}
-						helperText={errors?.passwordConfirm?.message}
-						variant="outlined"
-						required
-						fullWidth
-					/>
-				)}
-			/>
-
-			<Controller
-				name="acceptTermsConditions"
-				control={control}
-				render={({ field }) => (
-					<FormControl
-						className="items-center"
-						error={!!errors.acceptTermsConditions}
-					>
-						<FormControlLabel
-							label="J'accepte les conditions d'utilisation et la politique de confidentialité."
-							control={
-								<Checkbox
-									size="small"
-									{...field}
-								/>
-							}
-						/>
-						<FormHelperText>{errors?.acceptTermsConditions?.message}</FormHelperText>
-					</FormControl>
-				)}
-			/>
-
-			<Button
-				variant="contained"
-				color="secondary"
-				className="mt-24 w-full"
-				aria-label="Register"
-				disabled={_.isEmpty(dirtyFields) || !isValid}
-				type="submit"
-				size="large"
-			>
-				Create your free account
-			</Button>
-		</form>
-	);
+    return (
+        <form noValidate onSubmit={handleSubmit(onSubmit)} className="mt-8" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+            {currentStep === 0 && (
+                <>
+                    <Controller
+                        name="displayName"
+                        control={control}
+                        render={({ field, fieldState }) => (
+                            <TextField {...field} label="Nom" autoFocus error={!!fieldState.error} helperText={fieldState.error?.message} fullWidth margin="normal" />
+                        )}
+                    />
+                    <Controller
+                        name="email"
+                        control={control}
+                        render={({ field, fieldState }) => (
+                            <TextField {...field} label="Email" type="email" error={!!fieldState.error} helperText={fieldState.error?.message} fullWidth margin="normal" />
+                        )}
+                    />
+                    <Controller
+                        name="password"
+                        control={control}
+                        render={({ field, fieldState }) => (
+                            <TextField {...field} label="Mot de passe" type="password" error={!!fieldState.error} helperText={fieldState.error?.message} fullWidth margin="normal" />
+                        )}
+                    />
+                    <Controller
+                        name="passwordConfirm"
+                        control={control}
+                        render={({ field, fieldState }) => (
+                            <TextField {...field} label="Confirmer le mot de passe" type="password" error={!!fieldState.error} helperText={fieldState.error?.message} fullWidth margin="normal" />
+                        )}
+                    />
+                    <Button type="button" onClick={() => setCurrentStep(1)} fullWidth variant="contained" color="secondary" disabled={!isFirstStepValid()} sx={{ mt: 2, width: '80%' }}>
+                        Suivant
+                    </Button>
+                </>
+            )}
+            {currentStep === 1 && (
+                <>
+                    <IconButton onClick={() => setCurrentStep(0)} sx={{ alignSelf: 'flex-start', marginBottom: 2 }}>
+                        <ArrowBackIcon />
+                    </IconButton>
+                    <Controller
+                        name="address"
+                        control={control}
+                        render={({ field, fieldState }) => (
+                            <FormControl fullWidth error={!!fieldState.error} margin="normal">
+                                <InputLabel>Adresse</InputLabel>
+                                <Select {...field} label="Adresse" defaultValue="">
+                                    <MenuItem value="">Select a region</MenuItem>
+                                    {tunisianRegions.map((region, index) => (
+                                        <MenuItem key={index} value={region}>{region}</MenuItem>
+                                    ))}
+                                </Select>
+                                <FormHelperText>{fieldState.error?.message}</FormHelperText>
+                            </FormControl>
+                        )}
+                    />
+                    <Controller
+                        name="tel"
+                        control={control}
+                        render={({ field, fieldState }) => (
+                            <TextField
+                                {...field}
+                                label="Numéro de téléphone"
+                                type="tel"
+                                error={!!fieldState.error}
+                                helperText={fieldState.error?.message}
+                                fullWidth
+                                margin="normal"
+                                InputProps={{
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            <Avatar src="/assets/flags/tn.png" sx={{ width: 24, height: 24 }} />
+                                            <span style={{ marginLeft: 8 }}>+216</span>
+                                        </InputAdornment>
+                                    ),
+                                }}
+                            />
+                        )}
+                    />
+                    <Controller
+                        name="certificate"
+                        control={control}
+                        render={({ field, fieldState }) => (
+                            <FormControl fullWidth error={!!fieldState.error} margin="normal">
+                                <InputLabel>Logo</InputLabel>
+                                <Select
+                                    {...field}
+                                    label="Logo"
+                                    defaultValue=""
+                                    onChange={e => setValue('certificate', e.target.value, { shouldValidate: true })}
+                                >
+                                    <MenuItem value="">Select a logo</MenuItem>
+                                    {logos.map((logo, index) => (
+                                        <MenuItem key={index} value={logo.name}>
+                                            <ListItemAvatar>
+                                                <Avatar src={logo.path} />
+                                            </ListItemAvatar>
+                                            <ListItemText primary={logo.name} />
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                                <FormHelperText>{fieldState.error?.message}</FormHelperText>
+                            </FormControl>
+                        )}
+                    />
+                    <Button type="submit" variant="contained" color="secondary" sx={{ mt: 2, width: '80%' }} disabled={!isSecondStepValid()}>
+                        S'inscrire
+                    </Button>
+                </>
+            )}
+        </form>
+    );
 }
 
 export default JwtSignUpForm;
