@@ -34,24 +34,39 @@ const navigationConfig = [
     translate: "APPLICATIONS",
     children: [
       {
-        id: "apps.mailbox",
-        title: "Mailbox",
-        type: "item",
-        icon: "heroicons-outline:mail",
-        url: "/apps/mailbox",
-        translate: "MAIL",
-        badge: {
-          title: "27",
-          classes: "px-8 bg-pink-600 text-white rounded-full",
-        },
-      },
-      {
-        id: "apps.bourse",
-        title: "Bourse",
-        type: "item",
-        icon: "heroicons-outline:cash",
-        url: "/apps/bourses",
-      },
+				id: 'apps.mailbox',
+				title: 'Mailbox',
+				type: 'item',
+				icon: 'heroicons-outline:mail',
+				url: '/apps/mailbox',
+				translate: 'MAIL',
+				badge: {
+					title: '27',
+					classes: 'px-8 bg-pink-600 text-white rounded-full'
+				}
+			},			{
+				id: 'apps.bourse',
+				title: 'Bourse',
+				type: 'collapse',
+				icon: 'heroicons-outline:cash',
+				translate: 'BOURSE',
+				children: [
+					{
+						id: 'bourse-list',
+						title: 'Bourses Liste',
+						type: 'item',
+						url: '/apps/bourses',
+						end: true
+					},
+					{
+						id: 'bourse-add',
+						title: 'Ajout Bourse',
+						type: 'item',
+						url: '/apps/bourses/add',
+						end: true
+					},
+				]
+			},
       {
         id: "apps.events",
         title: "Evènements",

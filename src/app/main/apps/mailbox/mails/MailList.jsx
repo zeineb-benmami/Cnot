@@ -10,7 +10,7 @@ import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import { useAppSelector } from 'app/store/hooks';
 import MailListItem from './MailListItem';
 import { selectSearchText } from '../mailboxAppSlice';
-import { useGetMailboxMailsQuery } from '../MailboxApi';
+import { getEmails } from 'src/services/mailService';
 
 /**
  * The mail list.
@@ -18,21 +18,33 @@ import { useGetMailboxMailsQuery } from '../MailboxApi';
 function MailList() {
 	const routeParams = useParams();
 	const searchText = useAppSelector(selectSearchText);
-	const { data: mails } = useGetMailboxMailsQuery(routeParams);
+	const [mails, setMails] = useState([]);
 	const [filteredData, setFilteredData] = useState([]);
 	const { t } = useTranslation('mailboxApp');
+	const [account, setAccount] = useState({ mailaddress: "cnotperform@outlook.com", password: "123@Cnot" });
+
+	const getFilteredArray = (mails) => {
+		if (!mails) return [];
+		if (!searchText) return mails;
+		return FuseUtils.filterArrayByString(mails, searchText);
+	};
+
+	const fetchEmails = async (account) => {
+		try {
+			const result = await getEmails(account);
+			const data = result.data;
+			setMails(data.reverse());
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	useEffect(() => {
-		function getFilteredArray() {
-			if (searchText.length === 0) {
-				return mails;
-			}
+		fetchEmails(account);
+	}, [account]);
 
-			return FuseUtils.filterArrayByString(mails, searchText);
-		}
-
-		if (mails) {
-			setFilteredData(getFilteredArray());
-		}
+	useEffect(() => {
+		setFilteredData(getFilteredArray(mails));
 	}, [mails, searchText]);
 
 	if (!filteredData) {
@@ -68,7 +80,7 @@ function MailList() {
 			{filteredData.map((mail) => (
 				<MailListItem
 					mail={mail}
-					key={mail.id}
+					key={mail._id}
 				/>
 			))}
 		</List>
