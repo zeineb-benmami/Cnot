@@ -9,6 +9,7 @@ import { eventApiMocks } from "./api/events-api";
 import { calendarApiMocks } from "./api/calendar-api";
 import { projectDashboardApiMocks } from "./dashboards/project-api";
 import { analyticsDashboardApiMocks } from "./dashboards/analytics-api";
+import { messengerApiMocks } from './api/messenger-api';
 
 const mockAdapterOptions = {
   delayResponse: 0,
@@ -29,6 +30,7 @@ function MockAdapterProvider(props) {
         calendarApiMocks,
         projectDashboardApiMocks,
         analyticsDashboardApiMocks,
+        messengerApiMocks
       ].forEach((mockSetup) => {
         mockSetup(mock);
       });

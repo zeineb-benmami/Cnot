@@ -87,6 +87,14 @@ const navigationConfig = [
           classes: "px-8 bg-pink-600 text-white rounded-full",
         },
       },
+      {
+				id: 'apps.messenger',
+				title: 'Messenger',
+				type: 'item',
+				icon: 'heroicons-outline:chat-alt',
+				url: '/apps/messenger',
+				translate: 'MESSENGER'
+			}
     ],
   },
 ];
