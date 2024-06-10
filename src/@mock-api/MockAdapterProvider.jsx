@@ -7,6 +7,8 @@ import ExtendedMockAdapter from "./ExtendedMockAdapter";
 import { authApiMocks } from "./api/auth-api";
 import { eventApiMocks } from "./api/events-api";
 import { calendarApiMocks } from "./api/calendar-api";
+import { projectDashboardApiMocks } from "./dashboards/project-api";
+import { analyticsDashboardApiMocks } from "./dashboards/analytics-api";
 
 const mockAdapterOptions = {
   delayResponse: 0,
@@ -21,7 +23,13 @@ function MockAdapterProvider(props) {
   const isInitialMount = useRef(true);
   useEffect(() => {
     const setupAllMocks = () => {
-      [authApiMocks, eventApiMocks, calendarApiMocks].forEach((mockSetup) => {
+      [
+        authApiMocks,
+        eventApiMocks,
+        calendarApiMocks,
+        projectDashboardApiMocks,
+        analyticsDashboardApiMocks,
+      ].forEach((mockSetup) => {
         mockSetup(mock);
       });
     };

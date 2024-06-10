@@ -17,7 +17,7 @@ function EventsHeader() {
         animate={{ x: 0, transition: { delay: 0.2 } }}
       >
         <Typography className="text-24 md:text-32 font-extrabold tracking-tight">
-          Evènements
+          Evènements / Actions
         </Typography>
       </motion.span>
 

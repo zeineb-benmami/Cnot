@@ -64,7 +64,7 @@ function EventHeader() {
                 ? "heroicons-outline:arrow-sm-left"
                 : "heroicons-outline:arrow-sm-right"}
             </FuseSvgIcon>
-            <span className="flex mx-4 font-medium">Evènements</span>
+            <span className="flex mx-4 font-medium">Evènements / Actions</span>
           </Typography>
         </motion.div>
 
