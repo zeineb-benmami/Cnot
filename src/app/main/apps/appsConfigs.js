@@ -1,13 +1,18 @@
-import BourseAppConfig from './bourse/BourseAppConfig';
-import MailboxAppConfig from './mailbox/MailboxAppConfig';
-import MessengerAppConfig from './messenger/MessengerAppConfig';
 
+import MessengerAppConfig from './messenger/MessengerAppConfig';
+import BourseAppConfig from "./bourse/BourseAppConfig";
+import CalendarAppConfig from "./calendar/CalendarAppConfig";
+import EventsAppConfig from "./events/EventsAppConfig";
+import MailboxAppConfig from "./mailbox/MailboxAppConfig";
 /**
  * The list of application configurations.
  */
 const appsConfigs = [
 	BourseAppConfig,
 	MailboxAppConfig,
-	MessengerAppConfig
+	MessengerAppConfig,
+  EventsAppConfig,
+  CalendarAppConfig,
+  
 ];
 export default appsConfigs;

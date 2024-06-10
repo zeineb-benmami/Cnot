@@ -1,22 +1,17 @@
 import React, { useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { TextField, Button, FormControl, FormHelperText, Select, MenuItem, InputLabel, IconButton, ListItemText, Avatar, ListItemAvatar, InputAdornment } from '@mui/material';
+import { useForm, Controller } from 'react-hook-form';
+import { TextField, Button, FormControl, FormHelperText, Select, MenuItem, InputLabel, IconButton, InputAdornment, Avatar } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import useJwtAuth from 'src/app/auth/services/jwt/useJwtAuth';
+import { useDropzone } from 'react-dropzone';
 
 const tunisianRegions = [
     "Ariana", "Beja", "Ben Arous", "Bizerte", "Gabes", "Gafsa", 
     "Jendouba", "Kairouan", "Kasserine", "Kebili", "Kef", "Mahdia", 
     "Manouba", "Medenine", "Monastir", "Nabeul", "Sfax", "Sidi Bouzid", 
     "Siliana", "Sousse", "Tataouine", "Tozeur", "Tunis", "Zaghouan"
-];
-
-const logos = [
-    { name: "Federation1", path: "/assets/logos/federation1.png" },
-    { name: "Federation2", path: "/assets/logos/federation2.png" },
-    { name: "Federation3", path: "/assets/logos/federation3.png" }
 ];
 
 const schema = z.object({
@@ -26,7 +21,7 @@ const schema = z.object({
     passwordConfirm: z.string().min(8, 'La confirmation du mot de passe doit également contenir au moins 8 caractères'),
     address: z.string().min(1, 'Adresse est obligatoire'),
     tel: z.string().min(8, 'Le numéro de téléphone doit contenir au moins 8 chiffres'),
-    certificate: z.string().min(1, 'Logo obligatoire'),
+    certificate: z.any().optional(),
 }).refine((data) => data.password === data.passwordConfirm, {
     message: 'Les mots de passe ne correspondent pas',
     path: ['passwordConfirm']
@@ -46,7 +41,7 @@ function JwtSignUpForm() {
             passwordConfirm: '',
             address: '',
             tel: '',
-            certificate: ''
+            certificate: null
         }
     });
 
@@ -58,8 +53,8 @@ function JwtSignUpForm() {
 
     const isSecondStepValid = () => {
         const values = getValues();
-        return values.address && values.tel && values.certificate &&
-               !errors.address && !errors.tel && !errors.certificate;
+        return values.address && values.tel &&
+               !errors.address && !errors.tel ;
     };
 
     const onSubmit = formData => {
@@ -75,6 +70,24 @@ function JwtSignUpForm() {
                     console.error(error);
                 });
         }
+    };
+
+    const onDrop = (acceptedFiles, field) => {
+        field.onChange(acceptedFiles[0]);
+    };
+
+    const renderDropzone = ({ field }) => {
+        const { getRootProps, getInputProps } = useDropzone({
+            onDrop: (acceptedFiles) => onDrop(acceptedFiles, field)
+        });
+
+        return (
+            <div {...getRootProps({ className: 'dropzone', style: { border: '2px dashed #cccccc', padding: '20px', textAlign: 'center' } })}>
+                <input {...getInputProps()} />
+                <p>Drag 'n' drop a file here, or click to select a file</p>
+                {field.value && <p>Selected file: {field.value.name}</p>}
+            </div>
+        );
     };
 
     return (
@@ -161,28 +174,7 @@ function JwtSignUpForm() {
                     <Controller
                         name="certificate"
                         control={control}
-                        render={({ field, fieldState }) => (
-                            <FormControl fullWidth error={!!fieldState.error} margin="normal">
-                                <InputLabel>Logo</InputLabel>
-                                <Select
-                                    {...field}
-                                    label="Logo"
-                                    defaultValue=""
-                                    onChange={e => setValue('certificate', e.target.value, { shouldValidate: true })}
-                                >
-                                    <MenuItem value="">Select a logo</MenuItem>
-                                    {logos.map((logo, index) => (
-                                        <MenuItem key={index} value={logo.name}>
-                                            <ListItemAvatar>
-                                                <Avatar src={logo.path} />
-                                            </ListItemAvatar>
-                                            <ListItemText primary={logo.name} />
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                                <FormHelperText>{fieldState.error?.message}</FormHelperText>
-                            </FormControl>
-                        )}
+                        render={renderDropzone}
                     />
                     <Button type="submit" variant="contained" color="secondary" sx={{ mt: 2, width: '80%' }} disabled={!isSecondStepValid()}>
                         S'inscrire
