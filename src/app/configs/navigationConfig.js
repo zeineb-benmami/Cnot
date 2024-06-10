@@ -40,10 +40,26 @@ const navigationConfig = [
 			},			{
 				id: 'apps.bourse',
 				title: 'Bourse',
-				type: 'item',
+				type: 'collapse',
 				icon: 'heroicons-outline:cash',
-				url: '/apps/bourses'
-			}
+				translate: 'BOURSE',
+				children: [
+					{
+						id: 'bourse-list',
+						title: 'Bourses Liste',
+						type: 'item',
+						url: '/apps/bourses',
+						end: true
+					},
+					{
+						id: 'bourse-add',
+						title: 'Ajout Bourse',
+						type: 'item',
+						url: '/apps/bourses/add',
+						end: true
+					},
+				]
+			},
 		]
 	}
 ];

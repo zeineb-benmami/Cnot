@@ -1,6 +1,7 @@
 import i18next from 'i18next';
 import { Navigate } from 'react-router-dom';
 import { lazy } from 'react';
+import BourseAdd from './BourseAdd';
 
 
 const BourseApp = lazy(() => import('./BourseApp'));
@@ -23,8 +24,12 @@ const BourseAppConfig = {
 					element: <Navigate to="/apps/bourses" />
 				},
 				{
-					path: 'bourses/:bourseId/*',
+					path: 'bourses/:bourseId',
 					element: <BourseDetails />
+				},
+				{
+					path: 'bourses/add',
+					element: <BourseAdd />
 				},
 				{
 					path: 'bourses',
