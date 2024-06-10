@@ -60,8 +60,7 @@ function SignUpPage() {
 			  </div>
 	
 			  {selectedTabId === 'jwt' && <JwtSignUpTab />}
-			  {selectedTabId === 'firebase' && <FirebaseSignUpTab />}
-			  {selectedTabId === 'aws' && <AwsSignUpTab />}
+			  
 			</div>
 		  </Paper>
 	
