@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:3000/users";
+const BASE_URL = "http://localhost:3001/users";
 
 export async function signup(userData: any) {
   try {
@@ -59,9 +59,7 @@ export async function addAdmin(userData:any) {
 export async function signin(userData:any) {
   try {
     const response = await axios.post(`${BASE_URL}/signin`, userData);
-    // Stockage du token JWT dans le localStorage
-    localStorage.setItem("token", response.data.token);
-    //console.log(localStorage.getItem('token'));
+   
     return response.data;
   } catch (error:any) {
     throw error.response.data;

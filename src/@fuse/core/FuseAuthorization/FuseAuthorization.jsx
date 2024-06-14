@@ -12,8 +12,10 @@ import {
 import FuseLoading from '@fuse/core/FuseLoading';
 
 function isUserGuest(role) {
-	return !role || (Array.isArray(role) && role?.length === 0);
+    // This should return `false` if the role includes 'admin'
+    return !role || role.length === 0 || role.includes('guest');
 }
+
 
 /**
  * FuseAuthorization is a higher-order component that wraps its child component which handles the authorization logic of the app.
@@ -51,36 +53,34 @@ class FuseAuthorization extends Component {
 	}
 
 	static getDerivedStateFromProps(props, state) {
+		console.log("Current user role:", props.userRole);
 		const { location, userRole } = props;
 		const { pathname } = location;
 		const matchedRoutes = matchRoutes(state.routes, pathname);
 		const matched = matchedRoutes ? matchedRoutes[0] : false;
-		const isGuest = isUserGuest(userRole);
-
+	
 		if (!matched) {
 			return { accessGranted: true };
 		}
-
+	
 		const { route } = matched;
 		const userHasPermission = FuseUtils.hasPermission(route.auth, userRole);
 		const ignoredPaths = ['/', '/callback', '/sign-in', '/sign-out', '/logout', '/404'];
-
+	
 		if (matched && !userHasPermission && !ignoredPaths.includes(pathname)) {
 			setSessionRedirectUrl(pathname);
 		}
-
-		/**
-		 * If user is member but don't have permission to view the route
-		 * redirected to main route '/'
-		 */
-		if (!userHasPermission && !isGuest && !ignoredPaths.includes(pathname)) {
+	
+		// Adjust logic here to ensure it correctly checks for the admin role
+		if (!userHasPermission && !isUserGuest(userRole) && !ignoredPaths.includes(pathname)) {
 			setSessionRedirectUrl('/');
 		}
-
+	
 		return {
-			accessGranted: matched ? userHasPermission : true
+			accessGranted: userHasPermission
 		};
 	}
+	
 
 	redirectRoute() {
 		const { userRole, loginRedirectUrl = '/' } = this.props;

@@ -1,3 +1,4 @@
+
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
@@ -10,6 +11,9 @@ import Checkbox from '@mui/material/Checkbox';
 import { Link } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import useJwtAuth from '../useJwtAuth';
+import jwtDecode from 'jwt-decode';
+import { useNavigate } from 'react-router-dom'; // Ensure react-router-dom is installed and imported
+
 /**
  * Form Validation Schema
  */
@@ -38,8 +42,8 @@ function JwtSignInForm() {
     const { isValid, dirtyFields, errors } = formState;
 
     useEffect(() => {
-        setValue('email', 'admin@fusetheme.com', { shouldDirty: true, shouldValidate: true });
-        setValue('password', 'admin', { shouldDirty: true, shouldValidate: true });
+        setValue('email', 'zeinebbenmami2016@gmail.com', { shouldDirty: true, shouldValidate: true });
+        setValue('password', 'zzzz1234', { shouldDirty: true, shouldValidate: true });
     }, [setValue]);
 
     function onSubmit(formData) {
@@ -56,6 +60,35 @@ function JwtSignInForm() {
             }
         });
     }
+
+ 
+// function onSubmit(formData) {
+//     const { email, password } = formData;
+//     const navigate = useNavigate();
+
+//     signIn({ email, password })
+//         .then(response => {
+//             localStorage.setItem('jwt_access_token', response.token);  // Assuming token is returned in response
+//             const decodedToken = jwtDecode(response.token);
+//             const userRole = decodedToken.role;
+
+//             // Navigate based on the user role
+//             if (userRole === 'admin') {
+//                 navigate('/dashboards/project');
+//             } else {
+//                 navigate('/apps/messenger');
+//             }
+//         })
+//         .catch(error => {
+//             const errorData = error.response?.data || [];
+//             errorData.forEach((err) => {
+//                 setError(err.type, {
+//                     type: 'manual',
+//                     message: err.message
+//                 });
+//             });
+//         });
+// }
 
     return (
         <form
@@ -90,7 +123,7 @@ function JwtSignInForm() {
                     <TextField
                         {...field}
                         className="mb-24"
-                        label="Mot de passe"
+                        label="Password"
                         type="password"
                         error={!!errors.password}
                         helperText={errors?.password?.message}
@@ -108,7 +141,7 @@ function JwtSignInForm() {
                     render={({ field }) => (
                         <FormControl>
                             <FormControlLabel
-                                label="Souviens moi"
+                                label="Remember me"
                                 control={
                                     <Checkbox
                                         size="small"
@@ -121,7 +154,7 @@ function JwtSignInForm() {
                 />
 
                 <Link className="text-md font-medium" to="/pages/auth/forgot-password">
-				Mot de passe oubliée?
+                    Forgot password?
                 </Link>
             </div>
 
@@ -134,7 +167,7 @@ function JwtSignInForm() {
                 type="submit"
                 size="large"
             >
-                 Se Connecter
+                Sign in
             </Button>
         </form>
     );

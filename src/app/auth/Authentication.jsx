@@ -86,10 +86,11 @@ function Authentication(props) {
 	 */
 	const handleSignIn = useCallback((provider, userState) => {
 		dispatch(setUser(userState)).then(() => {
-			setAuthProvider(provider);
-			setIsLoading(false);
+		  setAuthProvider(provider);
+		  setIsLoading(false);
 		});
-	}, []);
+	  }, []);
+	  
 	/**
 	 * Handle sign out
 	 */
